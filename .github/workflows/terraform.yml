@@ -69,6 +69,18 @@ jobs:
         if: ${{ !cancelled() }}
         run: make shellcheck
 
+      - name: Send Telegram Notification
+        if: always() # Luôn chạy dù thành công hay thất bại để bạn biết trạng thái
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            🚀 OCI Free Tier Status: ${{ job.status }}
+            📦 Repo: ${{ github.repository }}
+            👤 Triggered by: ${{ github.actor }}
+            🔗 Link chi tiết: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
       # Fork PRs get a read-only GITHUB_TOKEN: no security-events: write, so the upload would fail.
       - name: Security scan (SARIF)
         if: ${{ !cancelled() && github.event.pull_request.head.repo.fork != true }}
