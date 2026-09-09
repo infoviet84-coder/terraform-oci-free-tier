@@ -67,7 +67,7 @@ variable "region" {
   validation {
     condition = contains([
       "af-johannesburg-1", "ap-chuncheon-1", "ap-hyderabad-1", "ap-melbourne-1",
-      "ap-mumbai-1", "ap-osaka-1", "ap-seoul-1", "ap-singapore-1", "ap-sydney-1",
+      "ap-mumbai-1", "ap-osaka-1", "ap-seoul-1", "ap-singapore-1", "ap-singapore-2", "ap-sydney-1",
       "ap-tokyo-1", "ca-montreal-1", "ca-toronto-1", "eu-amsterdam-1", "eu-frankfurt-1",
       "eu-madrid-1", "eu-marseille-1", "eu-milan-1", "eu-paris-1", "eu-stockholm-1",
       "eu-zurich-1", "il-jerusalem-1", "me-abudhabi-1", "me-dubai-1", "me-jeddah-1",
@@ -259,6 +259,7 @@ variable "instance_image_ocids_by_region" {
     ap-osaka-1        = "ocid1.image.oc1.ap-osaka-1.aaaaaaaawzfbc5pjimseh6eisfqhfztalzx46h5bhntvxomckmulk7hqtyoa"
     ap-seoul-1        = "ocid1.image.oc1.ap-seoul-1.aaaaaaaay3tcv6ttdutmyu32prvdidg5lojd2lzhue4eqnycor5oofiodeyq"
     ap-singapore-1    = "ocid1.image.oc1.ap-singapore-1.aaaaaaaamhhpqoyiobauojy3m2huj6tusesizrggbpek2wo4tksiwwv43ihq"
+    ap-singapore-2    = "ocid1.image.oc1.ap-singapore-1.aaaaaaaa6rpevbhllh3j6bx64bzxsiwhzjfzqjrojqomrmrfgaqbzzifmcnq"
     ap-sydney-1       = "ocid1.image.oc1.ap-sydney-1.aaaaaaaahbktlxr6owykyfvduw5b24giid5stnncevl2nif6pdcgtscd5h5q"
     ap-tokyo-1        = "ocid1.image.oc1.ap-tokyo-1.aaaaaaaaj7gohm3adsdbhhn7emx7bd6jny7dj5mipwnq62ub6eeryjgr7gnq"
     ca-montreal-1     = "ocid1.image.oc1.ca-montreal-1.aaaaaaaacezsnh42klz6sd5hlqsrlmypeqk4hxo3xphii4qa2l2gw2lkkm7a"
