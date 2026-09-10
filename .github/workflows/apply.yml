@@ -2,13 +2,12 @@ name: OCI Free Tier Auto Apply & Notify
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Tăng lên 30 phút/lần để tránh chồng chéo
+    - cron: '*/30 * * * *' # Giãn cách 30 phút/lần để tránh chồng chéo
   workflow_dispatch:
 
-# THÊM ĐOẠN NÀY ĐỂ TỰ ĐỘNG HỦY TIẾN TRÌNH CŨ NẾU TIẾN TRÌNH MỚI ĐẾN LỊCH CHẠY
 concurrency:
   group: oci-free-tier-hunt
-  cancel-in-progress: true
+  cancel-in-progress: true # Tự động hủy tiến trình cũ nếu có tiến trình mới chạy đè lên
 
 jobs:
   apply:
@@ -28,7 +27,6 @@ jobs:
           mkdir -p ~/.oci
           echo "${{ secrets.OCID_PRIVATE_KEY }}" > ~/.oci/oci_api_key.pem
           chmod 600 ~/.oci/oci_api_key.pem
-          # Tạo tệp config OCI từ các Repository Secrets của bạn
           cat << EOF > ~/.oci/config
           [DEFAULT]
           user=${{ secrets.OCI_USER_OCID }}
@@ -43,19 +41,19 @@ jobs:
 
       - name: OpenTofu Apply (Hunting VM)
         id: apply
-        continue-on-error: true # Cho phép tiếp tục nếu lỗi hết quota để script check kết quả bên dưới
+        continue-on-error: true
+        timeout-minutes: 5 # GIỚI HẠN THỜI GIAN: Bắt buộc dừng lệnh apply sau 5 phút nếu Oracle không phản hồi
         run: tofu apply -auto-approve
 
       - name: Check if Instance is Actually Created
         id: check_vm
         run: |
-          # Kiểm tra xem resource oci_core_instance đã thực sự tồn tại trong state hay chưa
           if tofu state list | grep -q "oci_core_instance"; then
             echo "status=created" >> $GITHUB_OUTPUT
             echo "🎉 Đã phát hiện tài nguyên máy ảo tồn tại trong Terraform state!"
           else
             echo "status=failed" >> $GITHUB_OUTPUT
-            echo "⏳ Vẫn chưa săn được VM, Oracle đang báo lỗi hết resource hoặc chưa khởi tạo."
+            echo "⏳ Vẫn chưa săn được VM, tiến trình kết thúc an toàn để chờ lượt sau."
           fi
 
       - name: Send Telegram Notification on Success Only
@@ -68,5 +66,5 @@ jobs:
             🔥 SĂN THÀNH CÔNG OCI FREE TIER VM! 🔥
             📦 Repo: ${{ github.repository }}
             👤 Triggered by: ${{ github.actor }}
-            🚀 Máy ảo ARM/AMD của bạn đã được khởi tạo thành công trên Oracle Cloud!
+            🚀 Máy ảo của bạn đã được khởi tạo thành công trên Oracle Cloud!
             🔗 Link chi tiết: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
