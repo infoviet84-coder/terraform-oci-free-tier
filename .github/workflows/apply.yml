@@ -2,8 +2,13 @@ name: OCI Free Tier Auto Apply & Notify
 
 on:
   schedule:
-    - cron: '*/15 * * * *' # Chạy tự động lặp lại mỗi 15 phút để săn VM
-  workflow_dispatch: # Cho phép bấm nút chạy thủ công (Run workflow) trên GitHub
+    - cron: '*/30 * * * *' # Tăng lên 30 phút/lần để tránh chồng chéo
+  workflow_dispatch:
+
+# THÊM ĐOẠN NÀY ĐỂ TỰ ĐỘNG HỦY TIẾN TRÌNH CŨ NẾU TIẾN TRÌNH MỚI ĐẾN LỊCH CHẠY
+concurrency:
+  group: oci-free-tier-hunt
+  cancel-in-progress: true
 
 jobs:
   apply:
