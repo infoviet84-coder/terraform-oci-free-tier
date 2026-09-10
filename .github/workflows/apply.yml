@@ -2,7 +2,7 @@ name: OCI Free Tier Auto Apply & Notify
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Giãn cách 30 phút/lần để tránh chồng chéo
+    - cron: '*/15 * * * *' # Giãn cách 30 phút/lần để tránh chồng chéo
   workflow_dispatch:
 
 concurrency:
